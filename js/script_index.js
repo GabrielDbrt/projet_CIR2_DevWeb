@@ -82,17 +82,22 @@ document.addEventListener('DOMContentLoaded', () => {
         const mediaCard = document.createElement('div');
         mediaCard.classList.add('movie');
         const mediaId = media.id;
+
+        // Formatage de la date
+        const releaseDate = new Date(media.release_date || media.first_air_date);
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        const formattedDate = releaseDate.toLocaleDateString('fr-FR', options);
+
         mediaCard.innerHTML = `
-        <a href="focus.html?id=${mediaId}&type=${type}">
-          <img src="https://image.tmdb.org/t/p/w500${media.poster_path}" alt="${media.title || media.name}">
-          <h5>${media.title || media.name}</h5>
-          <div class="score">
-            <p>${media.vote_average * 10}%</p>
-          </div>
-        </a>
-    `;
+            <a href="focus.html?id=${mediaId}&type=${type}">
+              <img src="https://image.tmdb.org/t/p/w500${media.poster_path}" alt="${media.title || media.name}">
+              <h5>${media.title || media.name}</h5>
+              <p>${formattedDate}</p>
+              <div class="score">
+                <p>${Math.round(media.vote_average * 10)}%</p>
+              </div>
+            </a>
+        `;
         return mediaCard;
     };
-
-
 });

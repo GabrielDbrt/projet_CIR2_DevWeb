@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const apiKey = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkNGFjZWU2Y2ZmMDBhNTNjYjE1NjE5NWNmNGEyM2M5MyIsIm5iZiI6MTczOTg4NDU0OS4zMjA5OTk5LCJzdWIiOiI2N2I0ODgwNTFlZDQ1Mjg0NTM5ZmI2NTQiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.xfyeXxd9pqUdNS2U8yLfciBOk5pl6hQvexrXowx6rVI'; // Remplacez par votre token d'accès
+    const apiKey = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkNGFjZWU2Y2ZmMDBhNTNjYjE1NjE5NWNmNGEyM2M5MyIsIm5iZiI6MTczOTg4NDU0OS4zMjA5OTk5LCJzdWIiOiI2N2I0ODgwNTFlZDQ1Mjg0NTM5ZmI2NTQiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.xfyeXxd9pqUdNS2U8yLfciBOk5pl6hQvexrXowx6rVI';
 
     const fetchData = (url) => {
         return fetch(url, {
@@ -23,10 +23,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
         fetchData(mediaUrl)
             .then(data => {
+                const banner = document.querySelector('.banner');
+                banner.style.backgroundImage = `url('https://image.tmdb.org/t/p/w1280${data.backdrop_path}')`;
                 document.getElementById('focus-poster').src = `https://image.tmdb.org/t/p/w500${data.poster_path}`;
                 document.getElementById('focus-title').innerText = data.title || data.name;
-                document.getElementById('focus-release-date').innerText = data.release_date || data.first_air_date;
+
+                // Formatage de la date
+                const releaseDate = new Date(data.release_date || data.first_air_date);
+                const options = { year: 'numeric', month: 'long', day: 'numeric' };
+                document.getElementById('focus-release-date').innerText = releaseDate.toLocaleDateString('fr-FR', options);
+
                 document.getElementById('focus-overview').innerText = data.overview;
+                document.getElementById('focus-score').innerText = `${data.vote_average * 10}%`;
                 document.getElementById('focus-cast').innerHTML = '';
 
                 const cast = data.credits.cast.slice(0, 8);
