@@ -13,12 +13,22 @@ document.addEventListener('DOMContentLoaded', () => {
             .catch(error => console.error('Erreur lors de la récupération des données:', error));
     };
 
+    const formatRuntime = (minutes) => {
+        const hours = Math.floor(minutes / 60);
+        const mins = minutes % 60;
+        if (hours > 0) {
+            return `${hours}h${mins > 0 ? ` ${mins}min` : ''}`;
+        } else {
+            return `${minutes}min`;
+        }
+    };
+
     const displayMediaDetails = (mediaId, mediaType) => {
         let mediaUrl;
         if (mediaType === 'movie') {
-            mediaUrl = `https://api.themoviedb.org/3/movie/${mediaId}?language=fr-FR&append_to_response=credits`;
+            mediaUrl = `https://api.themoviedb.org/3/movie/${mediaId}?language=fr-FR&append_to_response=credits,videos`;
         } else if (mediaType === 'tv') {
-            mediaUrl = `https://api.themoviedb.org/3/tv/${mediaId}?language=fr-FR&append_to_response=credits`;
+            mediaUrl = `https://api.themoviedb.org/3/tv/${mediaId}?language=fr-FR&append_to_response=credits,videos`;
         }
 
         fetchData(mediaUrl)
@@ -31,7 +41,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Formatage de la date
                 const releaseDate = new Date(data.release_date || data.first_air_date);
                 const options = { year: 'numeric', month: 'long', day: 'numeric' };
-                document.getElementById('focus-release-date').innerText = releaseDate.toLocaleDateString('fr-FR', options);
+                let dateInfo = releaseDate.toLocaleDateString('fr-FR', options);
+
+                // Ajouter la durée et les genres
+                const runtime = data.runtime ? ` • Durée : ${formatRuntime(data.runtime)}` : '';
+                const genres = data.genres ? ` • Genres : ${data.genres.map(genre => genre.name).join(', ')}` : '';
+
+                document.getElementById('focus-release-date').innerText = `${dateInfo}${runtime}${genres}`;
 
                 document.getElementById('focus-overview').innerText = data.overview;
                 document.getElementById('focus-score').innerText = `${data.vote_average * 10}%`;
@@ -42,12 +58,28 @@ document.addEventListener('DOMContentLoaded', () => {
                     const actorElement = document.createElement('div');
                     actorElement.classList.add('actor');
                     actorElement.innerHTML = `
-                        <img src="https://image.tmdb.org/t/p/w500${actor.profile_path}" alt="${actor.name}">
+                        <a href="actor.html?id=${actor.id}">
+                            <img src="https://image.tmdb.org/t/p/w500${actor.profile_path}" alt="${actor.name}" data-id="${actor.id}">
+                        </a>
                         <h4>${actor.name}</h4>
                         <span>${actor.character}</span>
                     `;
                     document.getElementById('focus-cast').appendChild(actorElement);
                 });
+
+                // Afficher la bande-annonce
+                const trailer = data.videos.results.find(video => video.type === 'Trailer');
+                const trailerContainer = document.getElementById('trailer-container');
+                if (trailer) {
+                    trailerContainer.innerHTML = `
+                        <iframe src="https://www.youtube.com/embed/${trailer.key}" frameborder="0" allowfullscreen></iframe>
+                    `;
+                } else {
+                    trailerContainer.classList.add('no-trailer');
+                    trailerContainer.innerText = `
+                        Aucune bande d'annonce disponible pour le moment.
+                    `;
+                }
             });
     };
 

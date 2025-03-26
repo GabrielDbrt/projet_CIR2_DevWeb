@@ -636,4 +636,173 @@ footer p {
     font-size: 1.1em;
   }
 }
+
+.focus-container .trailer {
+  width: 83%;
+  max-width: 1380px;
+  margin-top: 40px;
+  margin-bottom: 40px;
+  text-align: center;
+  border: 2px solid #ddd;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding-bottom: 60px
+}
+
+.focus-container .trailer h2 {
+  margin-bottom: 20px;
+  font-size: 36px;
+  font-weight: 400;
+  color: #333;
+}
+
+#trailer-container {
+  position: relative;
+  width: 70%;
+  padding-bottom: 39.375%;
+  height: 0;
+  overflow: hidden;
+  margin: 0 auto;
+}
+
+#trailer-container iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+#trailer-container.no-trailer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  font-size: 18px;
+  color: #777;
+  background-color: #f9f9f9;
+}
+
+.actor-container {
+  width: 83%;
+  max-width: 1380px;
+  margin: 40px auto;
+  text-align: center;
+}
+
+.actor-profile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.actor-profile img {
+  width: 200px;
+  height: 300px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.actor-details {
+  max-width: 800px;
+}
+
+.actor-details h1 {
+  font-size: 2em;
+  margin-bottom: 10px;
+}
+
+.actor-details p {
+  font-size: 1.2em;
+  margin-bottom: 20px;
+}
+
+.actor-details h2 {
+  font-size: 1.5em;
+  margin-bottom: 10px;
+}
+
+#actor-filmography {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.movie img {
+  width: 100%;
+  height: auto;
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+  margin-bottom: 10px;
+}
+
+.movie {
+  background-color: transparent;
+  padding: 0;
+  margin: 10px;
+}
+
+.movie h3, .movie p {
+  margin: 5px 0;
+}
+
+
+.search-results {
+  display: none; /* Masque initialement les résultats */
+  flex-direction: column;
+  align-items: center;
+  max-width: 600px;
+  padding: 10px;
+  width: 40%;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: absolute;
+  left: 36%;
+  transform: translateX(-50%) translateY(-120px);
+  z-index: 1000;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+
+/* Styles pour chaque élément de résultat */
+.search-results .result-item {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+  cursor: pointer;
+}
+
+.search-results .result-item:last-child {
+  border-bottom: none; /* Supprime la bordure du dernier élément */
+}
+
+.search-results .result-item img {
+  width: 50px; /* Agrandir l'image */
+  height: 75px; /* Ajustez selon vos besoins */
+  object-fit: cover; /* Assure que l'image couvre l'espace */
+  margin-right: 10px; /* Espacement entre l'image et le texte */
+}
+
+.search-results .result-item span {
+  font-size: 1em;
+  color: #333;
+  text-align: left; /* Aligne le texte à gauche */
+  width: calc(100% - 60px); /* Ajuste la largeur pour éviter le débordement */
+}
+
+/* Assurez-vous que le conteneur de recherche est positionné relativement */
+.search-container {
+  position: relative;
+}
+
+
 /*# sourceMappingURL=style.css.map */

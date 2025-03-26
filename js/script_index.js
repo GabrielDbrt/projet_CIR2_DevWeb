@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const apiKey = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkNGFjZWU2Y2ZmMDBhNTNjYjE1NjE5NWNmNGEyM2M5MyIsIm5iZiI6MTczOTg4NDU0OS4zMjA5OTk5LCJzdWIiOiI2N2I0ODgwNTFlZDQ1Mjg0NTM5ZmI2NTQiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.xfyeXxd9pqUdNS2U8yLfciBOk5pl6hQvexrXowx6rVI'; // Remplace par ton token d'accès
+    const apiKey = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkNGFjZWU2Y2ZmMDBhNTNjYjE1NjE5NWNmNGEyM2M5MyIsIm5iZiI6MTczOTg4NDU0OS4zMjA5OTk5LCJzdWIiOiI2N2I0ODgwNTFlZDQ1Mjg0NTM5ZmI2NTQiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.xfyeXxd9pqUdNS2U8yLfciBOk5pl6hQvexrXowx6rVI';
     let currentTrendingType = 'day';
     let currentTvType = 'top_rated';
 
@@ -99,5 +99,71 @@ document.addEventListener('DOMContentLoaded', () => {
             </a>
         `;
         return mediaCard;
+    };
+
+    // Ajout de la fonctionnalité de recherche avec suggestions
+    let searchTimeout;
+    document.getElementById('search-input').addEventListener('input', (event) => {
+        clearTimeout(searchTimeout);
+        const query = event.target.value;
+        if (query.trim()) {
+            searchTimeout = setTimeout(() => {
+                searchMovies(query);
+            }, 300); // Delay to avoid too many requests
+        } else {
+            document.getElementById('search-results').style.display = 'none';
+        }
+    });
+
+    document.getElementById('search-input').addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            const query = document.getElementById('search-input').value;
+            if (query.trim()) {
+                searchMovie(query);
+            }
+        }
+    });
+
+    document.getElementById('search-button').addEventListener('click', () => {
+        const query = document.getElementById('search-input').value;
+        if (query.trim()) {
+            searchMovie(query);
+        }
+    });
+
+    const searchMovies = (query) => {
+        const searchUrl = `https://api.themoviedb.org/3/search/movie?query=${encodeURIComponent(query)}&language=fr-FR`;
+        fetchData(searchUrl)
+            .then(data => {
+                const resultsContainer = document.getElementById('search-results');
+                resultsContainer.innerHTML = ''; // Clear previous results
+                resultsContainer.style.display = data.results.length > 0 ? 'block' : 'none';
+
+                data.results.slice(0, 5).forEach(movie => { // Limit to 5 results
+                    const resultItem = document.createElement('div');
+                    resultItem.innerHTML = `
+                        <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title}" style="width:60px;margin-right:10px;">
+                        <span>${movie.title}</span>
+                    `;
+                    resultItem.addEventListener('click', () => {
+                        window.location.href = `focus.html?id=${movie.id}&type=movie`;
+                    });
+                    resultsContainer.appendChild(resultItem);
+                });
+            });
+    };
+
+    const searchMovie = (query) => {
+        const searchUrl = `https://api.themoviedb.org/3/search/movie?query=${encodeURIComponent(query)}&language=fr-FR`;
+        fetchData(searchUrl)
+            .then(data => {
+                if (data.results.length > 0) {
+                    const firstResult = data.results[0];
+                    window.location.href = `focus.html?id=${firstResult.id}&type=movie`;
+                } else {
+                    alert('Aucun résultat trouvé');
+                }
+            });
     };
 });
