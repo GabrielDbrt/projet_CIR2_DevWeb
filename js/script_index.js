@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
         fetchData(tvApiUrl)
             .then(data => {
                 const populairesContainer = document.getElementById('populaires');
-                populairesContainer.innerHTML = ''; // Efface le contenu actuel
+                populairesContainer.innerHTML = '';
                 const numberOfShowsToDisplay = 4;
 
                 for (let i = 0; i < numberOfShowsToDisplay && i < data.results.length; i++) {
@@ -83,7 +83,6 @@ document.addEventListener('DOMContentLoaded', () => {
         mediaCard.classList.add('movie');
         const mediaId = media.id;
 
-        // Formatage de la date
         const releaseDate = new Date(media.release_date || media.first_air_date);
         const options = { year: 'numeric', month: 'long', day: 'numeric' };
         const formattedDate = releaseDate.toLocaleDateString('fr-FR', options);
@@ -101,7 +100,6 @@ document.addEventListener('DOMContentLoaded', () => {
         return mediaCard;
     };
 
-    // Ajout de la fonctionnalité de recherche avec suggestions
     let searchTimeout;
     document.getElementById('search-input').addEventListener('input', (event) => {
         clearTimeout(searchTimeout);
@@ -109,7 +107,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (query.trim()) {
             searchTimeout = setTimeout(() => {
                 searchMovies(query);
-            }, 300); // Delay to avoid too many requests
+            }, 300);
         } else {
             document.getElementById('search-results').style.display = 'none';
         }

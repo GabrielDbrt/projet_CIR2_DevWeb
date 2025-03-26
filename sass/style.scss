@@ -357,7 +357,7 @@
   align-items: center;
   -webkit-box-shadow: rgba(0, 0, 0, 0.44) 0px 3px 8px;
   box-shadow: rgba(0, 0, 0, 0.44) 0px 3px 8px;
-    position: absolute;
+  position: absolute;
 }
 
 .movie h5 {
@@ -750,9 +750,8 @@ footer p {
   margin: 5px 0;
 }
 
-
 .search-results {
-  display: none; /* Masque initialement les résultats */
+  display: none;
   flex-direction: column;
   align-items: center;
   max-width: 600px;
@@ -770,8 +769,6 @@ footer p {
   overflow-y: auto;
 }
 
-
-/* Styles pour chaque élément de résultat */
 .search-results .result-item {
   display: flex;
   align-items: center;
@@ -782,24 +779,23 @@ footer p {
 }
 
 .search-results .result-item:last-child {
-  border-bottom: none; /* Supprime la bordure du dernier élément */
+  border-bottom: none;
 }
 
 .search-results .result-item img {
-  width: 50px; /* Agrandir l'image */
-  height: 75px; /* Ajustez selon vos besoins */
-  object-fit: cover; /* Assure que l'image couvre l'espace */
-  margin-right: 10px; /* Espacement entre l'image et le texte */
+  width: 50px;
+  height: 75px;
+  object-fit: cover;
+  margin-right: 10px;
 }
 
 .search-results .result-item span {
   font-size: 1em;
   color: #333;
-  text-align: left; /* Aligne le texte à gauche */
-  width: calc(100% - 60px); /* Ajuste la largeur pour éviter le débordement */
+  text-align: left;
+  width: calc(100% - 60px);
 }
 
-/* Assurez-vous que le conteneur de recherche est positionné relativement */
 .search-container {
   position: relative;
 }

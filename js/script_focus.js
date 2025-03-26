@@ -43,7 +43,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 const options = { year: 'numeric', month: 'long', day: 'numeric' };
                 let dateInfo = releaseDate.toLocaleDateString('fr-FR', options);
 
-                // Ajouter la durée et les genres
                 const runtime = data.runtime ? ` • Durée : ${formatRuntime(data.runtime)}` : '';
                 const genres = data.genres ? ` • Genres : ${data.genres.map(genre => genre.name).join(', ')}` : '';
 
@@ -53,21 +52,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.getElementById('focus-score').innerText = `${data.vote_average * 10}%`;
                 document.getElementById('focus-cast').innerHTML = '';
 
-                const cast = data.credits.cast.slice(0, 8);
-                cast.forEach(actor => {
-                    const actorElement = document.createElement('div');
-                    actorElement.classList.add('actor');
-                    actorElement.innerHTML = `
-                        <a href="actor.html?id=${actor.id}">
-                            <img src="https://image.tmdb.org/t/p/w500${actor.profile_path}" alt="${actor.name}" data-id="${actor.id}">
-                        </a>
-                        <h4>${actor.name}</h4>
-                        <span>${actor.character}</span>
-                    `;
-                    document.getElementById('focus-cast').appendChild(actorElement);
-                });
+                const cast = data.credits.cast;
+                if (cast.length > 0) {
+                    cast.slice(0, 8).forEach(actor => {
+                        const actorElement = document.createElement('div');
+                        actorElement.classList.add('actor');
+                        actorElement.innerHTML = `
+                            <a href="actor.html?id=${actor.id}">
+                                <img src="https://image.tmdb.org/t/p/w500${actor.profile_path}" alt="${actor.name}" data-id="${actor.id}">
+                            </a>
+                            <h4>${actor.name}</h4>
+                            <span>${actor.character}</span>
+                        `;
+                        document.getElementById('focus-cast').appendChild(actorElement);
+                    });
+                } else {
+                    document.getElementById('focus-cast').innerText = 'Pas de casting disponible';
+                }
 
-                // Afficher la bande-annonce
                 const trailer = data.videos.results.find(video => video.type === 'Trailer');
                 const trailerContainer = document.getElementById('trailer-container');
                 if (trailer) {
@@ -83,7 +85,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
     };
 
-    // Récupérer les paramètres d'URL
     const urlParams = new URLSearchParams(window.location.search);
     const mediaId = urlParams.get('id');
     const mediaType = urlParams.get('type');

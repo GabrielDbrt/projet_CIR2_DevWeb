@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         fetchData(actorUrl)
             .then(data => {
-                console.log('Données de l\'acteur:', data); // Vérifiez les données reçues
+                console.log('Données de l\'acteur:', data);
 
                 document.getElementById('actor-poster').src = `https://image.tmdb.org/t/p/w500${data.profile_path}`;
                 document.getElementById('actor-name').innerText = data.name;
@@ -42,7 +42,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
     };
 
-    // Récupérer les paramètres d'URL
     const urlParams = new URLSearchParams(window.location.search);
     const actorId = urlParams.get('id');
 
