@@ -2,6 +2,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const apiKey = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkNGFjZWU2Y2ZmMDBhNTNjYjE1NjE5NWNmNGEyM2M5MyIsIm5iZiI6MTczOTg4NDU0OS4zMjA5OTk5LCJzdWIiOiI2N2I0ODgwNTFlZDQ1Mjg0NTM5ZmI2NTQiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.xfyeXxd9pqUdNS2U8yLfciBOk5pl6hQvexrXowx6rVI';
     let currentTrendingType = 'day';
     let currentTvType = 'top_rated';
+    let selectedGenre = '';
+    let selectedYear = '';
 
     const fetchData = (url) => {
         return fetch(url, {
@@ -15,8 +17,19 @@ document.addEventListener('DOMContentLoaded', () => {
             .catch(error => console.error('Erreur lors de la récupération des données:', error));
     };
 
-    const updateTrendingMovies = (type) => {
-        const movieApiUrl = `https://api.themoviedb.org/3/trending/movie/${type}?language=fr-FR`;
+    const updateTrendingMovies = (type, genre, year) => {
+        let movieApiUrl = `https://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&language=fr-FR`;
+
+        if (type) {
+            movieApiUrl += `&primary_release_date.gte=${type}`;
+        }
+        if (genre) {
+            movieApiUrl += `&with_genres=${genre}`;
+        }
+        if (year) {
+            movieApiUrl += `&year=${year}`;
+        }
+
         fetchData(movieApiUrl)
             .then(data => {
                 const tendancesContainer = document.getElementById('tendances');
@@ -51,14 +64,14 @@ document.addEventListener('DOMContentLoaded', () => {
         currentTrendingType = 'day';
         document.getElementById('day').classList.add('active');
         document.getElementById('week').classList.remove('active');
-        updateTrendingMovies(currentTrendingType);
+        updateTrendingMovies(currentTrendingType, selectedGenre, selectedYear);
     });
 
     document.getElementById('week').addEventListener('click', () => {
         currentTrendingType = 'week';
         document.getElementById('week').classList.add('active');
         document.getElementById('day').classList.remove('active');
-        updateTrendingMovies(currentTrendingType);
+        updateTrendingMovies(currentTrendingType, selectedGenre, selectedYear);
     });
 
     document.getElementById('top_rated').addEventListener('click', () => {
@@ -75,7 +88,19 @@ document.addEventListener('DOMContentLoaded', () => {
         updatePopularTvShows(currentTvType);
     });
 
-    updateTrendingMovies(currentTrendingType);
+    document.getElementById('genre-filter').addEventListener('change', (event) => {
+        selectedGenre = event.target.value;
+    });
+
+    document.getElementById('year-filter').addEventListener('input', (event) => {
+        selectedYear = event.target.value;
+    });
+
+    document.getElementById('apply-filters').addEventListener('click', () => {
+        updateTrendingMovies(currentTrendingType, selectedGenre, selectedYear);
+    });
+
+    updateTrendingMovies(currentTrendingType, selectedGenre, selectedYear);
     updatePopularTvShows(currentTvType);
 
     const createMediaCard = (media, type) => {
